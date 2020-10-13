@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/53ca3be78c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="master.css">
+    <title>World of notes</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="aside col-lg-2 col-md-3 border-right">
+                <div class="pad mx-auto">
+                    <div class="logo row">
+                        <img src="default/won_logo.png">
+                    </div>
+                    <button id="addNote" class="row d-flex align-items-center">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Add new note</span>
+                    </button>
+                    <form id="searchnote" class="form-group row d-flex flex-column">
+                        <input class="form-control" type="text" name="inputFilter" id="inputFilter">
+                        <div id="filter" class="d-flex flex-column">
+                            <button class="dropdown-btn" id="filterDropDown">
+                                Filter search
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-container">
+                                <!-- Link to inspiration: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_dropdown -->
+                                <label class="d-block">Type</label>
+                                <select class="d-block form-control" id="typeOfNote"> 
+                                    <option value="all">All</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="red">Red</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="orange">Orange</option>
+                                </select>
+                                <label><input type="checkbox" name="important" id="searchImportant">Set as important</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-secondary submit">Search</button>
+                        <small class="form-text text-muted" id="searchErrorMsg"></small>
+                        </form>
+                </div>
+            </aside>
+            <main class="col-lg-10 col-md-9 row" id="noteDesktop">
+            </main>
+        </div>
+        <div id="boxover" class="noDisplay">
+            <div id="addNewNote" class="noDisplay">
+                <button type="button" class="close" aria-label="Close" id="closeCreateForm">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                <h2>Create note</h2>
+                <form class="row" id="addNewNoteForm" action="/">
+                    <div class="col">
+                        <input class="form-control" type="text" name="inputTitle" id="title" placeholder="Title" required maxlength="25">
+                        <textarea form="addNewNoteForm" rows="8" name="textAreaBody" placeholder="Write your note her..." id="body" class="form-control"></textarea>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <select class="form-control" id="selectColour">
+                                <option value="blue">Blue</option>
+                                <option value="red">Red</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="purple">Purple</option>
+                                <option value="orange">Orange</option>
+                            </select>
+                            <small class="form-text text-muted">Chose a colour</small>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" name="inputImportant" id="inputImportant" class="form-check-input">
+                            <label for="inputImportant" class="form-check-label">Important</label>
+                        </div>                    
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-secondary btn-block submit">Create note</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="editNote" class="noDisplay">
+                <button type="button" class="close" aria-label="Close" id="closeEditForm">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                <h2>Edit note</h2>
+                <form class="row" id="editNoteForm" action="/">
+                    <div class="col">
+                        <input class="form-control" type="text" name="inputTitle" id="editTitle" placeholder="Title" required maxlength="25">
+                        <textarea form="addNewNoteForm" rows="8" name="textAreaBody" placeholder="Write your note her..." id="editBody" class="form-control"></textarea>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <select class="form-control" id="editSelectColour">
+                                <option value="blue">Blue</option>
+                                <option value="red">Red</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="purple">Purple</option>
+                                <option value="orange">Orange</option>
+                            </select>
+                            <small class="form-text text-muted">Chose a colour</small>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" name="inputImportant" id="editInputImportant" class="form-check-input">
+                            <label for="inputImportant" class="form-check-label">Important</label>
+                        </div>                    
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-secondary btn-block submit">Edit note</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Connect to the Firebase  -->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-analytics.js"></script> -->
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyA66JEvI_j5Ro0XehsKsZ4I_iSJXtepKiI",
+            authDomain: "world-of-notes-e67b3.firebaseapp.com",
+            databaseURL: "https://world-of-notes-e67b3.firebaseio.com",
+            projectId: "world-of-notes-e67b3",
+            storageBucket: "world-of-notes-e67b3.appspot.com",
+            messagingSenderId: "987177195093",
+            appId: "1:987177195093:web:ec9eb1f009b89a3998a6dc",
+            measurementId: "G-W7QX5QKLLP"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
